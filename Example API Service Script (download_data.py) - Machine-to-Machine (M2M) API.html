@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<!-- saved from url=(0057)https://m2m.cr.usgs.gov/api/docs/example/download_data-py -->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" dir="ltr" class="h-100"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        
+        <title>Example API Service Script (download_data.py) - Machine-to-Machine (M2M) API</title>
+        <meta http-equiv="Content-Security-Policy" content="default-src &#39;self&#39;;script-src &#39;self&#39; &#39;unsafe-inline&#39; https://cdnjs.cloudflare.com https://ajax.googleapis.com https://maps.googleapis.com https://maps.google.com https://stackpath.bootstrapcdn.com https://imsdev.cr.usgs.gov https://ims.cr.usgs.gov https://www.googletagmanager.com https://www.google-analytics.com https://search.usa.gov/ https://www.ssa.gov/ https://dap.digitalgov.gov;style-src &#39;self&#39; &#39;unsafe-inline&#39; https://stackpath.bootstrapcdn.com https://ajax.googleapis.com https://imsdev.cr.usgs.gov https://ims.cr.usgs.gov https://www.ssa.gov/;img-src &#39;self&#39; data: https://ajax.googleapis.com https://maps.google.com https://imsdev.cr.usgs.gov https://ims.cr.usgs.gov https://services.arcgisonline.com https://server.arcgisonline.com https://basemap.nationalmap.gov https://*.tile.openstreetmap.org https://www.ssa.gov/;connect-src &#39;self&#39; https://ajax.googleapis.com https://maps.google.com https://maps.googleapis.com https://www.google-analytics.com/;font-src &#39;self&#39; https://imsdev.cr.usgs.gov https://ims.cr.usgs.gov;object-src &#39;none&#39;;media-src &#39;self&#39;;frame-src &#39;none&#39;;child-src &#39;self&#39;;form-action &#39;self&#39;;base-uri &#39;self&#39;;worker-src &#39;none&#39;;manifest-src &#39;none&#39;;prefetch-src &#39;self&#39;">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Query and order satellite images, aerial photographs, and cartographic products through the U.S. Geological Survey">
+<meta name="keywords" content="U.S. Geological Survey,USGS,National Mapping Division,NMD,USA,
+                United States,Territories,Antarctica,cartographic,cartography,geographic,
+                geography,geospatial data,geographic information system,GIS,mapping,maps,
+                aerial photographs,satellite imagery,digital elevation model,
+                digital raster graphic,digital orthophoto,topographic,topography,
+                geographic names,earthscience,data,geospatial metadata,geospatial data standards,
+                landsat,GNIS,NAPP,DEM,DRG,DOQ,NSDI,Earth Explorer, EarthExplorer">
+<meta name="author" content="USGS - U.S. Geological Survey">
+<meta name="publisher" content="USGS - U.S. Geological Survey">
+<meta name="classification" content="Government">
+<meta name="robots" content="ALL">
+<meta name="distribution" content="Global">
+<meta name="rating" content="Safe For Kids">
+<meta name="copyright" content="None">
+<meta name="language" content="English">
+<meta name="doc-type" content="Government">
+<meta name="doc-class" content="Living Document">
+<meta name="doc-rights" content="Public Domain">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+        <!-- Le styles -->
+        <link href="./Example API Service Script (download_data.py) - Machine-to-Machine (M2M) API_files/common.css" media="screen" rel="stylesheet" type="text/css">
+<link href="./Example API Service Script (download_data.py) - Machine-to-Machine (M2M) API_files/all.min.css" media="screen" rel="stylesheet" type="text/css">
+<link href="./Example API Service Script (download_data.py) - Machine-to-Machine (M2M) API_files/style.css" media="screen" rel="stylesheet" type="text/css">
+<link href="https://m2m.cr.usgs.gov/img/favicon.ico" rel="shortcut icon" type="image/vnd.microsoft.icon"><link href="./Example API Service Script (download_data.py) - Machine-to-Machine (M2M) API_files/bootstrap.min.css" media="screen" rel="stylesheet" type="text/css">
+<link href="./Example API Service Script (download_data.py) - Machine-to-Machine (M2M) API_files/common.css" media="screen" rel="stylesheet" type="text/css">
+<link href="./Example API Service Script (download_data.py) - Machine-to-Machine (M2M) API_files/all.min.css" media="screen" rel="stylesheet" type="text/css">
+<link href="./Example API Service Script (download_data.py) - Machine-to-Machine (M2M) API_files/style.css" media="screen" rel="stylesheet" type="text/css">
+<link href="https://m2m.cr.usgs.gov/img/favicon.ico" rel="shortcut icon" type="image/vnd.microsoft.icon">
+        <!-- Scripts -->
+        <script src="./Example API Service Script (download_data.py) - Machine-to-Machine (M2M) API_files/iframe_api"></script><script type="text/javascript" async="" src="./Example API Service Script (download_data.py) - Machine-to-Machine (M2M) API_files/js"></script><script type="text/javascript" async="" src="./Example API Service Script (download_data.py) - Machine-to-Machine (M2M) API_files/js(1)"></script><script type="text/javascript" async="" src="./Example API Service Script (download_data.py) - Machine-to-Machine (M2M) API_files/js(2)"></script><script async="" src="./Example API Service Script (download_data.py) - Machine-to-Machine (M2M) API_files/gtm.js"></script><script type="text/javascript">
+            //Set some base confiugrations that all applications will be interested in
+            LaminasCore = {
+                baseUrl: "/"
+            };
+
+            //Frame buster - must have this
+            if (top != self) {
+                top.location = self.location;
+            }
+        </script>
+
+                    <!--NEW G4 Google analytics added--keep both versions until test results-->
+            <!---HAS to be in head tag to work, no longer allowed in footer-->
+            <!-- Global site tag (gtag.js) - Google Analytics -->
+            <script async="" src="./Example API Service Script (download_data.py) - Machine-to-Machine (M2M) API_files/js(3)"></script>
+            <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', 'G-71JPYV1CCS');
+            </script>
+
+            <!-- Google Tag Manager -->
+            <script>(function(w,d,s,l,i){
+                    w[l]=w[l]||[];
+                    w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});
+                    var f=d.getElementsByTagName(s)[0],
+                    j=d.createElement(s),
+                    dl=l!='dataLayer'?'&l='+l:'';
+                    j.async=true;
+                    j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;
+                    f.parentNode.insertBefore(j,f);
+                })(window,document,'script','dataLayer','GTM-TKQR8KP');
+            </script>
+            <!-- End Google Tag Manager -->
+
+        
+        <script src="./Example API Service Script (download_data.py) - Machine-to-Machine (M2M) API_files/jquery.min.js"></script>
+<script src="./Example API Service Script (download_data.py) - Machine-to-Machine (M2M) API_files/popper.min.js"></script>
+<script src="./Example API Service Script (download_data.py) - Machine-to-Machine (M2M) API_files/bootstrap.min.js"></script>    <script type="text/javascript" src="./Example API Service Script (download_data.py) - Machine-to-Machine (M2M) API_files/js(4)"></script></head>
+    <body class="d-flex flex-column h-100">
+        <!-- BEGIN USGS Applications Header Template -->
+                    <!-- Google Tag Manager (noscript) -->
+            <!--Added sandbox for security flag--will see if resolves the low security flag-->
+            <noscript><iframe sandbox src="https://www.googletagmanager.com/ns.html?id=GTM-TKQR8KP"
+                height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+            <!-- End Google Tag Manager (noscript) -->
+        
+        <link href="./Example API Service Script (download_data.py) - Machine-to-Machine (M2M) API_files/uswds.css" media="screen" rel="stylesheet" type="text/css">
+<link href="./Example API Service Script (download_data.py) - Machine-to-Machine (M2M) API_files/bootstrap.min.css" media="screen" rel="stylesheet" type="text/css">
+<link href="./Example API Service Script (download_data.py) - Machine-to-Machine (M2M) API_files/common.css" media="screen" rel="stylesheet" type="text/css">
+<link href="./Example API Service Script (download_data.py) - Machine-to-Machine (M2M) API_files/all.min.css" media="screen" rel="stylesheet" type="text/css">
+<link href="./Example API Service Script (download_data.py) - Machine-to-Machine (M2M) API_files/style.css" media="screen" rel="stylesheet" type="text/css">
+<link href="https://m2m.cr.usgs.gov/img/favicon.ico" rel="shortcut icon" type="image/vnd.microsoft.icon"><script>
+                    !function(){"use strict";var n,e="usa-js-loading";function t(){document.documentElement.classList.remove(e)}document.documentElement.classList.add(e),n=setTimeout(t,8e3),window.addEventListener("load",function e(){window.uswdsPresent&&(clearTimeout(n),t(),window.removeEventListener("load",e,!0))},!0)}();
+                    //# sourceMappingURL=uswds-init.min.js.map
+                  </script>        <section class="usa-banner" aria-label="Official website of the United States government">
+            <div class="usa-accordion">
+                <header class="usa-banner__header">
+                    <div class="usa-banner__inner">
+                        <div class="grid-col-auto">
+                            <img aria-hidden="true" class="usa-banner__header-flag" src="./Example API Service Script (download_data.py) - Machine-to-Machine (M2M) API_files/us_flag_small.png" alt="" style="border-radius: 0;">
+                        </div>
+                        <div class="grid-col-fill tablet:grid-col-auto" aria-hidden="">
+                            <p class="usa-banner__header-text" style="padding: 0px;">
+                                An official website of the United States government
+                            </p>
+                            <p class="usa-banner__header-action">Here’s how you know</p>
+                        </div>
+                        <button type="button" class="usa-accordion__button usa-banner__button" aria-expanded="false" aria-controls="gov-banner-default">
+                            <span class="usa-banner__button-text">Here’s how you know</span>
+                        </button>
+                    </div>
+                </header>
+                <div class="usa-banner__content usa-accordion__content" id="gov-banner-default" hidden="">
+                    <div class="grid-row grid-gap-lg">
+                        <div class="usa-banner__guidance tablet:grid-col-6">
+                            <img class="usa-banner__icon usa-media-block__img" src="./Example API Service Script (download_data.py) - Machine-to-Machine (M2M) API_files/icon-dot-gov.svg" role="img" alt="" aria-hidden="true">
+                            <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Official websites use .gov</strong><br>A
+                                    <strong>.gov</strong> website belongs to an official government organization in the United States.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="usa-banner__guidance tablet:grid-col-6">
+                            <img class="usa-banner__icon usa-media-block__img" src="./Example API Service Script (download_data.py) - Machine-to-Machine (M2M) API_files/icon-https.svg" role="img" alt="" aria-hidden="true">
+                            <div class="usa-media-block__body">
+                                <p>
+                                    <strong>Secure .gov websites use HTTPS</strong><br>A
+                                    <strong>lock</strong> (
+                                    <span class="icon-lock"><svg xmlns="http://www.w3.org/2000/svg" width="52" height="64" viewBox="0 0 52 64" class="usa-banner__lock-image" role="img" aria-labelledby="banner-lock-description-default" focusable="false">
+                                        <title id="banner-lock-title-default">Lock</title>
+                                        <desc id="banner-lock-description-default">Locked padlock icon</desc>
+                                        <path fill="#000000" fill-rule="evenodd" d="M26 0c10.493 0 19 8.507 19 19v9h3a4 4 0 0 1 4 4v28a4 4 0 0 1-4 4H4a4 4 0 0 1-4-4V32a4 4 0 0 1 4-4h3v-9C7 8.507 15.507 0 26 0zm0 8c-5.979 0-10.843 4.77-10.996 10.712L15 19v9h22v-9c0-6.075-4.925-11-11-11z"></path>
+                                        </svg> </span>) or <strong>https://</strong> means you’ve safely connected to the .gov website. Share sensitive information only on official, secure websites.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <header id="navbar" class="header-nav" role="banner">
+            <div class="tmp-container">
+                <!-- primary navigation bar -->
+                <!-- search bar -->
+                <div class="header-search">
+                    <a class="logo-header" href="https://www.usgs.gov/" title="USGS Home">
+                        <img class="img" src="./Example API Service Script (download_data.py) - Machine-to-Machine (M2M) API_files/usgs-logo.png" alt="Home">
+                    </a>
+                                    </div>
+                <!-- end search bar -->
+            </div>
+            <!-- end header-container -->
+        </header>
+        <!-- END USGS Applications Header Template -->
+
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="overflow: visible;">
+            <a class="navbar-brand" href="https://m2m.cr.usgs.gov/">Machine-to-Machine (M2M) API</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-menu" aria-controls="navbar-menu" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse justify-content-between" id="navbar-menu">
+                
+                <ul class="navbar-nav mr-auto">
+                        <li class="nav-item ">
+                                    <a class="nav-link " href="https://m2m.cr.usgs.gov/api/docs/json/">
+                                Documentation                                </a>
+            </li>
+                                <li class="nav-item ">
+                                    <a class="nav-link " href="https://m2m.cr.usgs.gov/api/test/json/">
+                                Test Page                                </a>
+            </li>
+                                <li class="nav-item ">
+                                    <a class="nav-link " href="https://m2m.cr.usgs.gov/api/docs/examples/">
+                                Scripting Examples                                </a>
+            </li>
+            </ul>
+
+                <!-- System Notifications -->
+                                
+                <ul class="navbar-nav">
+                        <li class="nav-item ">
+                                    <a class="nav-link " href="https://m2m.cr.usgs.gov/feedback" target="_blank">
+                                Feedback                                </a>
+            </li>
+                                <li id="authMenuLink" class="nav-item ">
+                                      
+                    <a class="nav-link " href="https://m2m.cr.usgs.gov/logout/" aria-label="Logout lewis.mullarkey">
+                                Logout [lewis.mullarkey]                                </a>
+            </li>
+            </ul>
+                                    <script type="text/javascript">
+    DevConsole = {
+        messageTypes: {},
+        logMessage: function(messageType, messageContents)
+        {
+            return;
+        },
+        init: function()
+        {
+
+        }
+    };
+</script>                            </div>
+        </nav>
+
+        
+        <div id="pageContentLayoutContainer" class="container-fluid">
+            <h3>Example API Service Script</h3>
+<pre class="code">	<code>
+# =============================================================================
+#  USGS/EROS Inventory Service Example
+#  Python - JSON API
+# 
+#  Script Last Modified: 2/15/2023
+#  Note: This example does not include any error handling!
+#        Any request can throw an error, which can be found in the errorCode proprty of
+#        the response (errorCode, errorMessage, and data properies are included in all responses).
+#        These types of checks could be done by writing a wrapper similiar to the sendRequest function below
+#  Usage: python download_data.py -u username -p token
+# =============================================================================
+
+# NOTE: The 'login' endpoint (used for authentication with the API) will be deprecated in February 2025. To continue using the API, use the 'login-token' endpoint for authentication.
+#       Additional details can be found here: https://www.usgs.gov/media/files/m2m-application-token-documentation
+
+import json
+import requests
+import sys
+import time
+import argparse
+import datetime
+import threading
+import re
+
+path = "" # Fill a valid path to save the downloaded files
+maxthreads = 5 # Threads count for downloads
+sema = threading.Semaphore(value=maxthreads)
+label = datetime.datetime.now().strftime("%Y%m%d_%H%M%S") # Customized label using date time
+threads = []
+
+# send http request
+def sendRequest(url, data, apiKey = None):  
+    pos = url.rfind('/') + 1
+    endpoint = url[pos:]
+    json_data = json.dumps(data)
+    
+    if apiKey == None:
+        response = requests.post(url, json_data)
+    else:
+        headers = {'X-Auth-Token': apiKey}              
+        response = requests.post(url, json_data, headers = headers)    
+    
+    try:
+      httpStatusCode = response.status_code 
+      if response == None:
+          print("No output from service")
+          sys.exit()
+      output = json.loads(response.text)	
+      if output['errorCode'] != None:
+          print("Failed Request ID", output['requestId'])
+          print(output['errorCode'], "-", output['errorMessage'])
+          sys.exit()
+      if  httpStatusCode == 404:
+          print("404 Not Found")
+          sys.exit()
+      elif httpStatusCode == 401: 
+          print("401 Unauthorized")
+          sys.exit()
+      elif httpStatusCode == 400:
+          print("Error Code", httpStatusCode)
+          sys.exit()
+    except Exception as e: 
+          response.close()
+          pos=serviceUrl.find('api')
+          print(f"Failed to parse request {endpoint} response. Re-check the input {json_data}. The input examples can be found at {url[:pos]}api/docs/reference/#{endpoint}\n")
+          sys.exit()
+    response.close()    
+    print(f"Finished request {endpoint} with request ID {output['requestId']}\n")
+    
+    return output['data']
+
+def downloadFile(url):
+    sema.acquire()
+    global path
+    try:        
+        response = requests.get(url, stream=True)
+        disposition = response.headers['content-disposition']
+        filename = re.findall("filename=(.+)", disposition)[0].strip("\"")
+        print(f"Downloading {filename} ...\n")
+        if path != "" and path[-1] != "/":
+            filename = "/" + filename
+        open(path + filename, 'wb').write(response.content)
+        print(f"Downloaded {filename}\n")
+        sema.release()
+    except Exception as e:
+        print(f"Failed to download from {url}. {e}. Will try to re-download.")
+        sema.release()
+        runDownload(threads, url)
+    
+def runDownload(threads, url):
+    thread = threading.Thread(target=downloadFile, args=(url,))
+    threads.append(thread)
+    thread.start()
+
+if __name__ == '__main__': 
+    #NOTE :: Passing credentials over a command line arguement is not considered secure
+    #        and is used only for the purpose of being example - credential parameters
+    #        should be gathered in a more secure way for production usage
+    #Define the command line arguements
+    
+    # user input    
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-u', '--username', required=True, help='ERS Username')
+    parser.add_argument('-t', '--token', required=True, help='ERS application token')
+    
+    args = parser.parse_args()
+    
+    username = args.username
+    token = args.token     
+
+    print("\nRunning Scripts...\n")
+    
+    serviceUrl = "https://m2m.cr.usgs.gov/api/api/json/stable/"
+    
+    # login-token
+    payload = {'username' : username, 'token' : token}
+    
+    apiKey = sendRequest(serviceUrl + "login-token", payload)
+    
+    print("API Key: " + apiKey + "\n")
+    
+    datasetName = "gls_all"
+    
+    spatialFilter =  {'filterType' : "mbr",
+                      'lowerLeft' : {'latitude' : 30, 'longitude' : -120},
+                      'upperRight' : { 'latitude' : 40, 'longitude' : -140}}
+                     
+    temporalFilter = {'start' : '2000-12-10', 'end' : '2005-12-10'}
+    
+    payload = {'datasetName' : datasetName,
+                               'spatialFilter' : spatialFilter,
+                               'temporalFilter' : temporalFilter}                     
+    
+    print("Searching datasets...\n")
+    datasets = sendRequest(serviceUrl + "dataset-search", payload, apiKey)
+    
+    print("Found ", len(datasets), " datasets\n")
+    
+    # download datasets
+    for dataset in datasets:
+        
+        # Because I've ran this before I know that I want GLS_ALL, I don't want to download anything I don't
+        # want so we will skip any other datasets that might be found, logging it incase I want to look into
+        # downloading that data in the future.
+        if dataset['datasetAlias'] != datasetName:
+            print("Found dataset " + dataset['collectionName'] + " but skipping it.\n")
+            continue
+            
+        # I don't want to limit my results, but using the dataset-filters request, you can
+        # find additional filters
+        
+        acquisitionFilter = {"end": "2005-12-10",
+                             "start": "2000-12-10" }        
+            
+        payload = {'datasetName' : dataset['datasetAlias'], 
+                                 'maxResults' : 2,
+                                 'startingNumber' : 1, 
+                                 'sceneFilter' : {
+                                                  'spatialFilter' : spatialFilter,
+                                                  'acquisitionFilter' : acquisitionFilter}}
+        
+        # Now I need to run a scene search to find data to download
+        print("Searching scenes...\n\n")   
+        
+        scenes = sendRequest(serviceUrl + "scene-search", payload, apiKey)
+    
+        # Did we find anything?
+        if scenes['recordsReturned'] &gt; 0:
+            # Aggregate a list of scene ids
+            sceneIds = []
+            for result in scenes['results']:
+                # Add this scene to the list I would like to download
+                sceneIds.append(result['entityId'])
+            
+            # Find the download options for these scenes
+            # NOTE :: Remember the scene list cannot exceed 50,000 items!
+            payload = {'datasetName' : dataset['datasetAlias'], 'entityIds' : sceneIds}
+                                
+            downloadOptions = sendRequest(serviceUrl + "download-options", payload, apiKey)
+        
+            # Aggregate a list of available products
+            downloads = []
+            for product in downloadOptions:
+                    # Make sure the product is available for this scene
+                    if product['available'] == True:
+                         downloads.append({'entityId' : product['entityId'],
+                                           'productId' : product['id']})
+                         
+            # Did we find products?
+            if downloads:
+                requestedDownloadsCount = len(downloads)
+                # set a label for the download request
+                label = datetime.datetime.now().strftime("%Y%m%d_%H%M%S") # Customized label using date time
+                payload = {'downloads' : downloads,
+                                             'label' : label}
+                # Call the download to get the direct download urls
+                requestResults = sendRequest(serviceUrl + "download-request", payload, apiKey)          
+                              
+                # PreparingDownloads has a valid link that can be used but data may not be immediately available
+                # Call the download-retrieve method to get download that is available for immediate download
+                if requestResults['preparingDownloads'] != None and len(requestResults['preparingDownloads']) &gt; 0:
+                    payload = {'label' : label}
+                    moreDownloadUrls = sendRequest(serviceUrl + "download-retrieve", payload, apiKey)
+                    
+                    downloadIds = []  
+                    
+                    for download in moreDownloadUrls['available']:
+                        if str(download['downloadId']) in requestResults['newRecords'] or str(download['downloadId']) in requestResults['duplicateProducts']:
+                            downloadIds.append(download['downloadId'])
+                            runDownload(threads, download['url'])
+                        
+                    for download in moreDownloadUrls['requested']:
+                        if str(download['downloadId']) in requestResults['newRecords'] or str(download['downloadId']) in requestResults['duplicateProducts']:
+                            downloadIds.append(download['downloadId'])
+                            runDownload(threads, download['url'])
+                     
+                    # Didn't get all of the reuested downloads, call the download-retrieve method again probably after 30 seconds
+                    while len(downloadIds) &lt; (requestedDownloadsCount - len(requestResults['failed'])): 
+                        preparingDownloads = requestedDownloadsCount - len(downloadIds) - len(requestResults['failed'])
+                        print("\n", preparingDownloads, "downloads are not available. Waiting for 30 seconds.\n")
+                        time.sleep(30)
+                        print("Trying to retrieve data\n")
+                        moreDownloadUrls = sendRequest(serviceUrl + "download-retrieve", payload, apiKey)
+                        for download in moreDownloadUrls['available']:                            
+                            if download['downloadId'] not in downloadIds and (str(download['downloadId']) in requestResults['newRecords'] or str(download['downloadId']) in requestResults['duplicateProducts']):
+                                downloadIds.append(download['downloadId'])
+                                runDownload(threads, download['url'])
+                            
+                else:
+                    # Get all available downloads
+                    for download in requestResults['availableDownloads']:
+                        runDownload(threads, download['url'])
+        else:
+            print("Search found no results.\n")
+    
+    print("Downloading files... Please do not close the program\n")
+    for thread in threads:
+        thread.join()
+            
+    print("Complete Downloading")
+                
+    # Logout so the API Key cannot be used anymore
+    endpoint = "logout"  
+    if sendRequest(serviceUrl + endpoint, None, apiKey) == None:        
+        print("Logged Out\n\n")
+    else:
+        print("Logout Failed\n\n")            
+    
+        </code>
+</pre>
+        </div>
+
+        
+        <footer class="footer mt-auto py-3">
+            <div class="container-fluid">
+                <div class="d-flex">
+                    <div>
+                        <ul class="menu nav">
+                            <li><a href="https://www.doi.gov/privacy">DOI Privacy Policy</a></li>
+                            <li><a href="https://www.usgs.gov/policies-and-notices">Legal</a></li>
+                            <li><a href="https://www.usgs.gov/accessibility-and-us-geological-survey">Accessibility</a></li>
+                            <li><a href="https://www.usgs.gov/sitemap">Site Map</a></li>
+                            <li><a href="https://answers.usgs.gov/">Contact USGS</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <hr>
+
+                <div class="d-flex">
+                    <div>
+                        <ul class="menu nav">
+                            <li><a href="https://www.doi.gov/">U.S. Department of the Interior</a></li>
+                            <li><a href="https://www.doioig.gov/">DOI Inspector General</a></li>
+                            <li><a href="https://www.whitehouse.gov/">White House</a></li>
+                            <li><a href="https://www.whitehouse.gov/omb/management/egov/">E-gov</a></li>
+                            <li><a href="https://www.doi.gov/pmb/eeo/no-fear-act">No Fear Act</a></li>
+                            <li><a href="https://www.usgs.gov/foia">FOIA</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="ml-auto footer-icons">
+                        <ul>
+                                                    </ul>
+                    </div>
+                </div>
+            </div>
+        </footer>
+                    <!-- Google Tag Manager (noscript) -->
+            <!--Added sandbox for security flag--will see if resolves the low security flag-->
+            <noscript><iframe sandbox src="https://www.googletagmanager.com/ns.html?id=GTM-TKQR8KP"
+                height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+            <!-- End Google Tag Manager (noscript) -->
+
+            
+            <script type="text/javascript" src="./Example API Service Script (download_data.py) - Machine-to-Machine (M2M) API_files/analytics.js"></script>
+
+            <!--OLD version of GA--remove once results verififed-->
+            <script type="text/javascript">
+                try {
+                    ga('set', 'anonymizeIp', true);
+
+                    ga('create', 'UA-21295076-2', 'auto', {'name': 'lta'});
+
+                    //Assuming this is what will be required once usgs analytics is updated
+                    ga('lta.send', 'pageview');
+                } catch (exception) {
+                    // Ignore the exception and continue loading EE
+                    console.log(exception);
+                }
+            </script>
+
+        
+            
+
+    <script src="./Example API Service Script (download_data.py) - Machine-to-Machine (M2M) API_files/uswds.min.js"></script>
+
+<div style="display: none; visibility: hidden;"><script async="null" type="text/javascript" id="_fed_an_ua_tag" src="./Example API Service Script (download_data.py) - Machine-to-Machine (M2M) API_files/Universal-Federated-Analytics-Min.js"></script>
+</div></body></html>
