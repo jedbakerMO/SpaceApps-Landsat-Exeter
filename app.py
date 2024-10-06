@@ -1,15 +1,10 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 import os
 
 app = Flask(__name__)
 
-@app.route("/")
-def home():
-    return render_template('index.html')
+from routes.home import *
 
-@app.route("/docs")
-def docs():
-    return render_template('docs.html')
 
 
 
