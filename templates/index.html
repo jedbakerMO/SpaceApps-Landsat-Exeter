@@ -26,24 +26,55 @@
       </ul>
     </header>
       <div>
-        <div class="col-md-2 row g-2">
+        <div class="row">
+          <div class="col">
         <label for="LongInput">Longitude</label>
         <input class="form-control" id="LongInput">
+            </div>
+          <div class="col">
         <label for="LatInput">Latitude</label>
         <input class="form-control" id="LatInput">
+            </div>
+          <div class="col">
+          <label for="ScanInput">Next Scan:</label>
+          <input class="form-control" id="ScanInput">
+            <input type="button" onclick="remind()" value="Remind Me">
           </div>
+        </div>
       <div id="map" class="justify-content-center" style="width: 600px; height:400px"></div>
+        <div id="submit"><input type="button" value="Calculate" onclick="calculate()"></input></div>
       </div>
     </div>
 
   <script>
 
-	const map = L.map('map').setView([51.505, -0.09], 13);
+	const map = L.map('map').setView([50.727, -3.476], 13);
     var marker;
 	const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 		maxZoom: 19,
 		attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
 	}).addTo(map);
+
+    // define rectangle geographical bounds
+    function calculate() {
+      var latlngs = [[52.73441, -1.46942],[50.53967, -1.25835],[50.61457, 2.16182],[52.81541, 2.12012]];
+
+      var polygon = L.polygon(latlngs, {color: 'red'}).addTo(map);
+    // zoom the map to the polygon
+      map.fitBounds(polygon.getBounds());
+      /*
+      var bounds = [[52.73441, -1.46942], [50.61457, 2.16182]];
+
+    // create an orange rectangle
+    L.rectangle(bounds, {color: "#6e4ddb", weight: 1}).addTo(map);
+
+    // zoom the map to the rectangle bounds
+    map.fitBounds(bounds);
+
+     */
+    document.getElementById("ScanInput").value = '11/10/2024'
+
+}
 
 
   map.on('click', function (e) {
@@ -54,6 +85,7 @@
     document.getElementById("LatInput").value = Math.round(e.latlng.lat * 100) / 100
     document.getElementById("LongInput").value = Math.round(e.latlng.lng * 100) / 100;
   });
+
 
   </script>
   </body>
