@@ -38,12 +38,36 @@
           <div class="col">
           <label for="ScanInput">Next Scan:</label>
           <input class="form-control" id="ScanInput">
-            <input type="button" onclick="remind()" value="Remind Me">
+            <label for="DaysInput">Days Notice</label>
+            <input class="form-control" id="DaysInput">
+          <button type="button" class="btn btn-primary" onclick="updateMessage()" data-bs-toggle="modal" data-bs-target="#exampleModal">
+            Remind Me
+          </button>
+
           </div>
         </div>
       <div id="map" class="justify-content-center" style="width: 600px; height:400px"></div>
-        <div id="submit"><input type="button" value="Calculate" onclick="calculate()"></input></div>
+        <div id="submit"><button type="button" class="btn btn-primary" onclick="calculate()">Calculate</button></div>
       </div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Request Accepted.</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" id="modalMessage">
+        You will be sent an email, notifying you when the next scan will be.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
     </div>
 
   <script>
@@ -55,6 +79,10 @@
 		attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
 	}).addTo(map);
 
+    function updateMessage() {
+      value = document.getElementById("DaysInput").value
+      document.getElementById('modalMessage').innerHTML = 'You will be sent an email, notifying you in '+ value.toString() + ' days'
+    }
     // define rectangle geographical bounds
     function calculate() {
       var latlngs = [[52.73441, -1.46942],[50.53967, -1.25835],[50.61457, 2.16182],[52.81541, 2.12012]];
